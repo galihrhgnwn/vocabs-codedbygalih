@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary List - Dark Mode</title>
+    <style>
+        /* CSS untuk tampilan halaman dark mode */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000; /* Hitam pekat untuk AMOLED */
+            color: #e0e0e0; /* Warna teks terang agar nyaman dibaca */
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #121212; /* Warna latar belakang kontainer yang sangat gelap */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            border: 1px solid #282828;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ffffff;
+            padding: 1.5rem;
+            margin: 0;
+            background-color: #1c1c1c; /* Abu-abu yang lebih gelap untuk header */
+            border-bottom: 1px solid #333333;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #333333;
+            white-space: nowrap;
+        }
+
+        thead {
+            background-color: #2c2c2c;
+            color: #ffffff;
+        }
+
+        th {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+
+        tbody tr:hover {
+            background-color: #252525;
+        }
+
+        td:first-child {
+            font-weight: 500;
+            color: #9e9e9e;
+            width: 1%;
+        }
+        
+        td:nth-child(2) {
+            font-weight: 500;
+            color: #fafafa;
+        }
+        
+        /* CSS untuk efek blur */
+        .indonesian-translation {
+            transition: all 0.3s ease; /* Transisi saat blur hilang */
+        }
+
+        .indonesian-translation.blurred {
+            filter: blur(5px); /* Efek blur */
+            color: transparent; /* Sembunyikan teks */
+            user-select: none; /* Agar tidak bisa di-select saat blur */
+            cursor: pointer;
+        }
+
+        /* CSS untuk Floating Button */
+        #toggle-blur-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 55px;
+            height: 55px;
+            background-color: rgba(255, 255, 255, 0.15); /* Latar belakang transparan */
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: background-color 0.3s ease;
+            z-index: 999; /* Pastikan tombol di bawah notifikasi */
+        }
+
+        #toggle-blur-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        #toggle-blur-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+        }
+        
+        /* -- BARU: CSS untuk Notifikasi Toast -- */
+        #welcome-toast {
+            position: fixed;
+            bottom: 95px; /* Posisi di atas floating button */
+            right: 25px;
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid #444;
+            z-index: 1000; /* Pastikan notifikasi di atas segalanya */
+            max-width: 250px;
+
+            /* Keadaan awal: tersembunyi */
+            opacity: 0;
+            transform: translateY(15px);
+            visibility: hidden;
+
+            /* Transisi untuk animasi halus */
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0.4s;
+        }
+
+        /* Class 'visible' untuk memunculkan notifikasi */
+        #welcome-toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        /* Panah kecil ala speech bubble */
+        #welcome-toast::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            width: 0; 
+            height: 0; 
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #2c2c2c;
+        }
+        
+        #welcome-toast p {
+            margin: 0;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Aturan CSS khusus untuk layar kecil (HP/Mobile) */
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+                padding-bottom: 90px;
+            }
+            .container { border-radius: 8px; }
+            h1 { font-size: 1.6rem; padding: 1rem; }
+            .table-wrapper { padding: 0 1rem 1rem 1rem; }
+            th, td { padding: 0.8rem 1rem; font-size: 0.9rem; }
+            #toggle-blur-btn { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+            #welcome-toast { bottom: 80px; right: 20px; }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Vocabulary</h1>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>English</th>
+                        <th>Indonesia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Setiap <td> ketiga diberi class 'indonesian-translation' -->
+                    <tr><td>1</td><td>Hurtling</td><td class="indonesian-translation">Meluncur cepat</td></tr>
+                    <tr><td>2</td><td>Evacuate</td><td class="indonesian-translation">Mengungsikan</td></tr>
+                    <tr><td>3</td><td>Extraordinary</td><td class="indonesian-translation">Luar biasa</td></tr>
+                    <tr><td>4</td><td>Materialize</td><td class="indonesian-translation">Terwujud</td></tr>
+                    <tr><td>5</td><td>Peninsula</td><td class="indonesian-translation">Semenanjung</td></tr>
+                    <tr><td>6</td><td>Sparsely</td><td class="indonesian-translation">Jarang</td></tr>
+                    <tr><td>7</td><td>Seismic</td><td class="indonesian-translation">Seismik / Berkaitan dengan gempa</td></tr>
+                    <tr><td>8</td><td>Aftershocks</td><td class="indonesian-translation">Gempa susulan</td></tr>
+                    <tr><td>9</td><td>Foreshocks</td><td class="indonesian-translation">Gempa pendahuluan</td></tr>
+                    <tr><td>10</td><td>Devastating</td><td class="indonesian-translation">Menghancurkan</td></tr>
+                    <tr><td>11</td><td>Advisories</td><td class="indonesian-translation">Peringatan</td></tr>
+                    <tr><td>12</td><td>Epicenter</td><td class="indonesian-translation">Pusat gempa</td></tr>
+                    <tr><td>13</td><td>Moorings</td><td class="indonesian-translation">Tambatan kapal</td></tr>
+                    <tr><td>14</td><td>Chaotic</td><td class="indonesian-translation">Kacau</td></tr>
+                    <tr><td>15</td><td>Casualties</td><td class="indonesian-translation">Korban jiwa</td></tr>
+                    <tr><td>16</td><td>Blaring</td><td class="indonesian-translation">Berbunyi nyaring</td></tr>
+                    <tr><td>17</td><td>Prefecture</td><td class="indonesian-translation">Prefektur</td></tr>
+                    <tr><td>18</td><td>Gridlock</td><td class="indonesian-translation">Kemacetan total</td></tr>
+                    <tr><td>19</td><td>Accordingly</td><td class="indonesian-translation">Dengan demikian</td></tr>
+                    <tr><td>20</td><td>Territories</td><td class="indonesian-translation">Wilayah</td></tr>
+                    <tr><td>21</td><td>Mogul</td><td class="indonesian-translation">Tokoh berpengaruh</td></tr>
+                    <tr><td>22</td><td>Occupy</td><td class="indonesian-translation">Menduduki</td></tr>
+                    <tr><td>23</td><td>Summit</td><td class="indonesian-translation">Pertemuan puncak</td></tr>
+                    <tr><td>24</td><td>Bilateral</td><td class="indonesian-translation">Bilateral</td></tr>
+                    <tr><td>25</td><td>Eviscerate</td><td class="indonesian-translation">Melemahkan drastis</td></tr>
+                    <tr><td>26</td><td>Cede</td><td class="indonesian-translation">Menyerahkan</td></tr>
+                    <tr><td>27</td><td>Sovereignty</td><td class="indonesian-translation">Kedaulatan</td></tr>
+                    <tr><td>28</td><td>Encirclement</td><td class="indonesian-translation">Pengepungan</td></tr>
+                    <tr><td>29</td><td>Principally</td><td class="indonesian-translation">Terutama</td></tr>
+                    <tr><td>30</td><td>Dilemma</td><td class="indonesian-translation">Dilema</td></tr>
+                    <tr><td>31</td><td>Slivers</td><td class="indonesian-translation">Potongan kecil</td></tr>
+                    <tr><td>32</td><td>Purported</td><td class="indonesian-translation">Diduga</td></tr>
+                    <tr><td>33</td><td>Ascendancy</td><td class="indonesian-translation">Keunggulan</td></tr>
+                    <tr><td>34</td><td>Subjugated</td><td class="indonesian-translation">Ditaklukkan</td></tr>
+                    <tr><td>35</td><td>Gain</td><td class="indonesian-translation">Keuntungan</td></tr>
+                    <tr><td>36</td><td>Contingent</td><td class="indonesian-translation">Bergantung</td></tr>
+                    <tr><td>37</td><td>Impetus</td><td class="indonesian-translation">Dorongan</td></tr>
+                    <tr><td>38</td><td>Apparent</td><td class="indonesian-translation">Tampak</td></tr>
+                    <tr><td>39</td><td>Lexicon</td><td class="indonesian-translation">Kosakata</td></tr>
+                    <tr><td>40</td><td>Sinister</td><td class="indonesian-translation">Jahat</td></tr>
+                    <tr><td>41</td><td>Burgeoning</td><td class="indonesian-translation">Berkembang pesat</td></tr>
+                    <tr><td>42</td><td>Populist</td><td class="indonesian-translation">Populis</td></tr>
+                    <tr><td>43</td><td>Parliamentary</td><td class="indonesian-translation">Parlementer</td></tr>
+                    <tr><td>44</td><td>Resonating</td><td class="indonesian-translation">Bergema</td></tr>
+                    <tr><td>45</td><td>Assemblies</td><td class="indonesian-translation">Majelis</td></tr>
+                    <tr><td>46</td><td>Traction</td><td class="indonesian-translation">Dukungan</td></tr>
+                    <tr><td>47</td><td>Overtourism</td><td class="indonesian-translation">Pariwisata berlebihan</td></tr>
+                    <tr><td>48</td><td>Depleting</td><td class="indonesian-translation">Menguras</td></tr>
+                    <tr><td>49</td><td>Stagnant</td><td class="indonesian-translation">Mandek</td></tr>
+                    <tr><td>50</td><td>Naturalize</td><td class="indonesian-translation">Naturalisasi</td></tr>
+                    <tr><td>51</td><td>Espionage</td><td class="indonesian-translation">Spionase</td></tr>
+                    <tr><td>52</td><td>Deterrent</td><td class="indonesian-translation">Pencegah</td></tr>
+                    <tr><td>53</td><td>Xenophobic</td><td class="indonesian-translation">Anti-orang asing</td></tr>
+                    <tr><td>54</td><td>Discriminatory</td><td class="indonesian-translation">Diskriminatif</td></tr>
+                    <tr><td>55</td><td>Triumphant</td><td class="indonesian-translation">Penuh kemenangan</td></tr>
+                    <tr><td>56</td><td>Rebuke</td><td class="indonesian-translation">Teguran</td></tr>
+                    <tr><td>57</td><td>Coalition</td><td class="indonesian-translation">Koalisi</td></tr>
+                    <tr><td>58</td><td>Earlier</td><td class="indonesian-translation">Sebelumnya</td></tr>
+                    <tr><td>59</td><td>Particularly</td><td class="indonesian-translation">Terutama</td></tr>
+                    <tr><td>60</td><td>Weakness</td><td class="indonesian-translation">Kelemahan</td></tr>
+                    <tr><td>61</td><td>Construction</td><td class="indonesian-translation">Pembangunan</td></tr>
+                    <tr><td>62</td><td>Reactor</td><td class="indonesian-translation">Reaktor</td></tr>
+                    <tr><td>63</td><td>Facility</td><td class="indonesian-translation">Fasilitas</td></tr>
+                    <tr><td>64</td><td>Meltdown</td><td class="indonesian-translation">Pelelehan inti reaktor</td></tr>
+                    <tr><td>65</td><td>Contribute</td><td class="indonesian-translation">Berkontribusi</td></tr>
+                    <tr><td>66</td><td>Operator</td><td class="indonesian-translation">Operator</td></tr>
+                    <tr><td>67</td><td>Topography</td><td class="indonesian-translation">Topografi</td></tr>
+                    <tr><td>68</td><td>Geology</td><td class="indonesian-translation">Geologi</td></tr>
+                    <tr><td>69</td><td>Compliance</td><td class="indonesian-translation">Kepatuhan</td></tr>
+                    <tr><td>70</td><td>Utilities</td><td class="indonesian-translation">Layanan publik</td></tr>
+                    <tr><td>71</td><td>Estimate</td><td class="indonesian-translation">Perkiraan</td></tr>
+                    <tr><td>72</td><td>Equity</td><td class="indonesian-translation">Modal</td></tr>
+                    <tr><td>73</td><td>Successor</td><td class="indonesian-translation">Penerus</td></tr>
+                    <tr><td>74</td><td>Step</td><td class="indonesian-translation">Langkah</td></tr>
+                    <tr><td>75</td><td>Suspended</td><td class="indonesian-translation">Ditangguhkan</td></tr>
+                    <tr><td>76</td><td>Decommission</td><td class="indonesian-translation">Menonaktifkan</td></tr>
+                    <tr><td>77</td><td>Premise</td><td class="indonesian-translation">Premis</td></tr>
+                    <tr><td>78</td><td>Towards</td><td class="indonesian-translation">Menuju</td></tr>
+                    <tr><td>79</td><td>Implemented</td><td class="indonesian-translation">Diterapkan</td></tr>
+                    <tr><td>80</td><td>Incorporating</td><td class="indonesian-translation">Menggabungkan</td></tr>
+                    <tr><td>81</td><td>Sufficient</td><td class="indonesian-translation">Cukup</td></tr>
+                    <tr><td>82</td><td>Corresponding</td><td class="indonesian-translation">Sesuai</td></tr>
+                    <tr><td>83</td><td>Recruited</td><td class="indonesian-translation">Direkrut</td></tr>
+                    <tr><td>84</td><td>Comprehensive</td><td class="indonesian-translation">Menyeluruh</td></tr>
+                    <tr><td>85</td><td>Questionnaire</td><td class="indonesian-translation">Kuesioner</td></tr>
+                    <tr><td>86</td><td>Epidemiology</td><td class="indonesian-translation">Epidemiologi</td></tr>
+                    <tr><td>87</td><td>Correlates</td><td class="indonesian-translation">Berkorelasi</td></tr>
+                    <tr><td>88</td><td>Dilate</td><td class="indonesian-translation">Melebar</td></tr>
+                    <tr><td>89</td><td>Predisposed</td><td class="indonesian-translation">Rentan</td></tr>
+                    <tr><td>90</td><td>Inflammation</td><td class="indonesian-translation">Peradangan</td></tr>
+                    <tr><td>91</td><td>Substantiated</td><td class="indonesian-translation">Terbukti</td></tr>
+                    <tr><td>92</td><td>Arrhythmias</td><td class="indonesian-translation">Aritmia</td></tr>
+                    <tr><td>93</td><td>Exponential</td><td class="indonesian-translation">Eksponensial</td></tr>
+                    <tr><td>94</td><td>Alternatively</td><td class="indonesian-translation">Sebagai alternatif</td></tr>
+                    <tr><td>95</td><td>Metronome</td><td class="indonesian-translation">Metronom</td></tr>
+                    <tr><td>96</td><td>Brisk</td><td class="indonesian-translation">Cepat</td></tr>
+                    <tr><td>97</td><td>Coordinated</td><td class="indonesian-translation">Terkoordinasi</td></tr>
+                    <tr><td>98</td><td>Opposing</td><td class="indonesian-translation">Berlawanan</td></tr>
+                    <tr><td>99</td><td>Hypertension</td><td class="indonesian-translation">Tekanan darah tinggi</td></tr>
+                    <tr><td>100</td><td>Universally</td><td class="indonesian-translation">Secara umum</td></tr>
+                    <tr><td>101</td><td>Physiological</td><td class="indonesian-translation">Fisiologis</td></tr>
+                    <tr><td>102</td><td>Autopilot</td><td class="indonesian-translation">Otomatis</td></tr>
+                    <tr><td>103</td><td>Mechanics</td><td class="indonesian-translation">Mekanika</td></tr>
+                    <tr><td>104</td><td>Compensatory</td><td class="indonesian-translation">Penyeimbang</td></tr>
+                    <tr><td>105</td><td>Dysfunction</td><td class="indonesian-translation">Gangguan fungsi</td></tr>
+                    <tr><td>106</td><td>Biomechanics</td><td class="indonesian-translation">Biomekanika</td></tr>
+                    <tr><td>107</td><td>Gait</td><td class="indonesian-translation">Cara berjalan</td></tr>
+                    <tr><td>108</td><td>Reciprocal</td><td class="indonesian-translation">Timbal balik</td></tr>
+                    <tr><td>109</td><td>Propels</td><td class="indonesian-translation">Mendorong</td></tr>
+                    <tr><td>110</td><td>Asymmetry</td><td class="indonesian-translation">Ketidaksimetrisan</td></tr>
+                    <tr><td>111</td><td>Preemptive</td><td class="indonesian-translation">Pencegahan</td></tr>
+                    <tr><td>112</td><td>Shuffling</td><td class="indonesian-translation">Menyeret langkah</td></tr>
+                    <tr><td>113</td><td>Postural</td><td class="indonesian-translation">Terkait postur</td></tr>
+                    <tr><td>114</td><td>Hunched</td><td class="indonesian-translation">Membungkuk</td></tr>
+                    <tr><td>115</td><td>Subtle</td><td class="indonesian-translation">Samar</td></tr>
+                    <tr><td>116</td><td>Vertically</td><td class="indonesian-translation">Secara vertikal</td></tr>
+                    <tr><td>117</td><td>Jutting</td><td class="indonesian-translation">Menonjol</td></tr>
+                    <tr><td>118</td><td>Footfalls</td><td class="indonesian-translation">Langkah kaki</td></tr>
+                    <tr><td>119</td><td>Consciously</td><td class="indonesian-translation">Secara sadar</td></tr>
+                    <tr><td>120</td><td>Adjusting</td><td class="indonesian-translation">Menyesuaikan</td></tr>
+                    <tr><td>121</td><td>Continent</td><td class="indonesian-translation">Benua</td></tr>
+                    <tr><td>122</td><td>Lifeline</td><td class="indonesian-translation">Jalur penyelamat</td></tr>
+                    <tr><td>123</td><td>Steepest</td><td class="indonesian-translation">Paling curam</td></tr>
+                    <tr><td>124</td><td>Levies</td><td class="indonesian-translation">Pajak</td></tr>
+                    <tr><td>125</td><td>Powerhouses</td><td class="indonesian-translation">Kekuatan besar</td></tr>
+                    <tr><td>126</td><td>Imposition</td><td class="indonesian-translation">Pemberlakuan</td></tr>
+                    <tr><td>127</td><td>Forfeiting</td><td class="indonesian-translation">Kehilangan hak</td></tr>
+                    <tr><td>128</td><td>Alternative</td><td class="indonesian-translation">Alternatif</td></tr>
+                    <tr><td>129</td><td>Buoyant</td><td class="indonesian-translation">Kuat (ekonomi)</td></tr>
+                    <tr><td>130</td><td>Crippled</td><td class="indonesian-translation">Melumpuhkan</td></tr>
+                    <tr><td>131</td><td>Landlocked</td><td class="indonesian-translation">Terkurung daratan</td></tr>
+                    <tr><td>132</td><td>Eligible</td><td class="indonesian-translation">Layak</td></tr>
+                    <tr><td>133</td><td>Grappling</td><td class="indonesian-translation">Menghadapi</td></tr>
+                    <tr><td>134</td><td>Plummeting</td><td class="indonesian-translation">Menurun drastis</td></tr>
+                    <tr><td>135</td><td>Calamities</td><td class="indonesian-translation">Bencana</td></tr>
+                    <tr><td>136</td><td>Reservations</td><td class="indonesian-translation">Keraguan</td></tr>
+                    <tr><td>137</td><td>Enticing</td><td class="indonesian-translation">Menarik</td></tr>
+                    <tr><td>138</td><td>Injuries</td><td class="indonesian-translation">Cedera</td></tr>
+                    <tr><td>139</td><td>Sustained</td><td class="indonesian-translation">Diderita</td></tr>
+                    <tr><td>140</td><td>Bouts</td><td class="indonesian-translation">Pertandingan</td></tr>
+                    <tr><td>141</td><td>Collapsed</td><td class="indonesian-translation">Ambruk</td></tr>
+                    <tr><td>142</td><td>Champion</td><td class="indonesian-translation">Juara</td></tr>
+                    <tr><td>143</td><td>Emergency</td><td class="indonesian-translation">Darurat</td></tr>
+                    <tr><td>144</td><td>Surgery</td><td class="indonesian-translation">Operasi</td></tr>
+                    <tr><td>145</td><td>Subdural</td><td class="indonesian-translation">Subdural</td></tr>
+                    <tr><td>146</td><td>Mourns</td><td class="indonesian-translation">Berduka</td></tr>
+                    <tr><td>147</td><td>Succumbed</td><td class="indonesian-translation">Meninggal</td></tr>
+                    <tr><td>148</td><td>Warrior</td><td class="indonesian-translation">Pejuang</td></tr>
+                    <tr><td>149</td><td>Craniotomy</td><td class="indonesian-translation">Kraniotomi</td></tr>
+                    <tr><td>150</td><td>Heartbreaking</td><td class="indonesian-translation">Menyayat hati</td></tr>
+                    <tr><td>151</td><td>Condolences</td><td class="indonesian-translation">Belasungkawa</td></tr>
+                    <tr><td>152</td><td>Commission</td><td class="indonesian-translation">Komisi</td></tr>
+                    <tr><td>153</td><td>Intensive</td><td class="indonesian-translation">Intensif</td></tr>
+                    <tr><td>154</td><td>Suffer</td><td class="indonesian-translation">Menderita</td></tr>
+                    <tr><td>155</td><td>Defeat</td><td class="indonesian-translation">Kekalahan</td></tr>
+                    <tr><td>156</td><td>Passing</td><td class="indonesian-translation">Kematian</td></tr>
+                    <tr><td>157</td><td>Exceptional</td><td class="indonesian-translation">Istimewa</td></tr>
+                    <tr><td>158</td><td>Tireless</td><td class="indonesian-translation">Tak kenal lelah</td></tr>
+                    <tr><td>159</td><td>Commitment</td><td class="indonesian-translation">Komitmen</td></tr>
+                    <tr><td>160</td><td>Expertise</td><td class="indonesian-translation">Keahlian</td></tr>
+                    <tr><td>161</td><td>Innovative</td><td class="indonesian-translation">Inovatif</td></tr>
+                    <tr><td>162</td><td>Instrumental</td><td class="indonesian-translation">Berperan penting</td></tr>
+                    <tr><td>163</td><td>Gratitude</td><td class="indonesian-translation">Rasa terima kasih</td></tr>
+                    <tr><td>164</td><td>Collective</td><td class="indonesian-translation">Bersama</td></tr>
+                    <tr><td>165</td><td>Accomplish</td><td class="indonesian-translation">Mencapai</td></tr>
+                    <tr><td>166</td><td>Predecessor</td><td class="indonesian-translation">Pendahulu</td></tr>
+                    <tr><td>167</td><td>Legacy</td><td class="indonesian-translation">Warisan</td></tr>
+                    <tr><td>168</td><td>Culmination</td><td class="indonesian-translation">Puncak</td></tr>
+                    <tr><td>169</td><td>Constructors</td><td class="indonesian-translation">Konstruktor</td></tr>
+                    <tr><td>170</td><td>Consecutive</td><td class="indonesian-translation">Berturut-turut</td></tr>
+                    <tr><td>171</td><td>Dominant</td><td class="indonesian-translation">Dominan</td></tr>
+                    <tr><td>172</td><td>Exonerated</td><td class="indonesian-translation">Dibebaskan dari tuduhan</td></tr>
+                    <tr><td>173</td><td>Corroborate</td><td class="indonesian-translation">Menguatkan</td></tr>
+                    <tr><td>174</td><td>Steadfast</td><td class="indonesian-translation">Teguh</td></tr>
+                    <tr><td>175</td><td>Motivations</td><td class="indonesian-translation">Motivasi</td></tr>
+                    <tr><td>176</td><td>Announced</td><td class="indonesian-translation">Diumumkan</td></tr>
+                    <tr><td>177</td><td>Hybrid</td><td class="indonesian-translation">Gabungan</td></tr>
+                    <tr><td>178</td><td>Abundant</td><td class="indonesian-translation">Berlimpah</td></tr>
+                    <tr><td>179</td><td>Obelisk</td><td class="indonesian-translation">Obelisk</td></tr>
+                    <tr><td>180</td><td>Gigawatts</td><td class="indonesian-translation">Gigawatt</td></tr>
+                    <tr><td>181</td><td>Renewable</td><td class="indonesian-translation">Terbarukan</td></tr>
+                    <tr><td>182</td><td>Reliant</td><td class="indonesian-translation">Bergantung</td></tr>
+                    <tr><td>183</td><td>Blackouts</td><td class="indonesian-translation">Pemadaman</td></tr>
+                    <tr><td>184</td><td>Ambitious</td><td class="indonesian-translation">Ambisius</td></tr>
+                    <tr><td>185</td><td>Flagship</td><td class="indonesian-translation">Unggulan</td></tr>
+                    <tr><td>186</td><td>Tender</td><td class="indonesian-translation">Lelang</td></tr>
+                    <tr><td>187</td><td>Curb</td><td class="indonesian-translation">Mengurangi</td></tr>
+                    <tr><td>188</td><td>Capacity</td><td class="indonesian-translation">Kapasitas</td></tr>
+                    <tr><td>189</td><td>Availability</td><td class="indonesian-translation">Ketersediaan</td></tr>
+                    <tr><td>190</td><td>Storage</td><td class="indonesian-translation">Penyimpanan</td></tr>
+                    <tr><td>191</td><td>Issued</td><td class="indonesian-translation">Dikeluarkan</td></tr>
+                    <tr><td>192</td><td>Intermittency</td><td class="indonesian-translation">Ketidakstabilan</td></tr>
+                    <tr><td>193</td><td>Operational</td><td class="indonesian-translation">Operasional</td></tr>
+                    <tr><td>194</td><td>Installation</td><td class="indonesian-translation">Instalasi</td></tr>
+                    <tr><td>195</td><td>Generation</td><td class="indonesian-translation">Pembangkitan</td></tr>
+                    <tr><td>196</td><td>Premium</td><td class="indonesian-translation">Biaya tambahan</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- BARU: Notifikasi Toast -->
+    <div id="welcome-toast">
+        <p>Gunakan tombol ini untuk menyembunyikan terjemahan!</p>
+    </div>
+
+    <!-- Floating Button -->
+    <button id="toggle-blur-btn" title="Toggle Terjemahan">
+        <svg id="icon-visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        <svg id="icon-hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .69l2.23 2.23c.57-.23 1.18-.36 1.83-.36zm-4.6 10.29l1.43-1.43c-.37-.51-.64-1.08-.8-1.69l-2.2 2.2C4.98 17.08 3.27 15.34 2 13.59c1.73-4.39 6-7.5 11-7.5.96 0 1.89.13 2.78.38l-2.07 2.07c-.45-.14-.91-.22-1.39-.22-2.76 0-5 2.24-5 5 0 .48.08.94.22 1.39l-2.07 2.07c-.25-.89-.38-1.82-.38-2.78 0-1.07.21-2.09.6-3.03l-2.92-2.92C3.11 9.27 1.73 10.61 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l-2.36-2.36c-.51.26-1.08.43-1.69.5z"/></svg>
+    </button>
+    
+    <script>
+        // --- LOGIKA UNTUK FLOATING BUTTON ---
+        const toggleBtn = document.getElementById('toggle-blur-btn');
+        const translations = document.querySelectorAll('.indonesian-translation');
+        const iconVisible = document.getElementById('icon-visible');
+        const iconHidden = document.getElementById('icon-hidden');
+        
+        let isBlurred = false;
+
+        toggleBtn.addEventListener('click', () => {
+            isBlurred = !isBlurred;
+            translations.forEach(td => {
+                td.classList.toggle('blurred');
+            });
+            if (isBlurred) {
+                iconVisible.style.display = 'none';
+                iconHidden.style.display = 'block';
+            } else {
+                iconVisible.style.display = 'block';
+                iconHidden.style.display = 'none';
+            }
+        });
+
+        // -- BARU: LOGIKA UNTUK NOTIFIKASI TOAST --
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcomeToast = document.getElementById('welcome-toast');
+
+            // Munculkan notifikasi setelah halaman selesai dimuat
+            // Diberi sedikit jeda (500ms) agar lebih mulus
+            setTimeout(() => {
+                welcomeToast.classList.add('visible');
+            }, 500);
+
+            // Sembunyikan notifikasi setelah 3 detik (total 3500ms dari awal)
+            setTimeout(() => {
+                welcomeToast.classList.remove('visible');
+            }, 3500);
+        });
+    </script>
+
+</body>
+</html>
+
+
